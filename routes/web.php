@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,14 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\AlbumController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\PlaylistController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 // Artists
@@ -41,7 +41,7 @@ Route::get('/albums/{album:slug}/edit', [AlbumController::class, 'edit'])->name(
 Route::put('/albums/{album:slug}', [AlbumController::class, 'update'])->name('albums.update');
 Route::delete('/albums/{album:slug}', [AlbumController::class, 'destroy'])->name('albums.destroy');
 
-// Songs (no slug, just id, as songs are not SEO entities)
+// Songs
 Route::get('/songs', [SongController::class, 'index'])->name('songs.index');
 Route::get('/songs/create', [SongController::class, 'create'])->name('songs.create');
 Route::post('/songs', [SongController::class, 'store'])->name('songs.store');
@@ -60,3 +60,15 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/playlists/{playlist:slug}', [PlaylistController::class, 'update'])->name('playlists.update');
     Route::delete('/playlists/{playlist:slug}', [PlaylistController::class, 'destroy'])->name('playlists.destroy');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';

@@ -12,11 +12,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Create a demo user
+        \App\Models\User::factory()->create([
+            'name' => 'Demo User',
+            'email' => 'demo@example.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            ArtistSeeder::class,
+            AlbumSeeder::class,
+            SongSeeder::class,
+            PlaylistSeeder::class,
+        ]);
     }
 }

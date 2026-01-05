@@ -3,8 +3,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Artist;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Redirect;
+use App\Services\MusicBrainzService;
 
 class ArtistController extends Controller
 {
@@ -23,11 +25,22 @@ class ArtistController extends Controller
         return view('artists.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, MusicBrainzService $musicBrainz)
     {
         $validated = $request->validate([
             'name' => 'required|unique:artists,name',
         ]);
+
+        // External validation with MusicBrainz
+
+        $mbResult = $musicBrainz->artistExists($validated['name']);
+        if ($mbResult !== true) {
+            $errorMsg = $mbResult === false
+                ? 'Artist not found on MusicBrainz. Please check the spelling or try another name.'
+                : $mbResult;
+            return back()->withErrors(['name' => $errorMsg])->withInput();
+        }
+
         $artist = Artist::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),

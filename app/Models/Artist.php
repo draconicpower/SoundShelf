@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Artist extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'slug', 'portrait_url'];
+    protected $fillable = ['name', 'slug'];
 
     public function albums(): HasMany
     {

@@ -42,14 +42,10 @@ class ArtistController extends Controller
         }
 
         $portraitUrl = null;
-        if (method_exists($musicBrainz, 'getArtistPortrait')) {
-            $portraitUrl = $musicBrainz->getArtistPortrait($mbResponse['id']);
-        }
 
         $artist = Artist::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
-            'portrait_url' => $portraitUrl,
         ]);
         return Redirect::route('artists.show', $artist->slug)->with('success', 'Artist created!');
     }

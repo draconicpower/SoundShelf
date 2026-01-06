@@ -14,9 +14,6 @@
     @forelse($artists as $artist)
         <div class="bg-white/10 backdrop-blur rounded-xl shadow-lg p-6 border border-white/20 flex flex-col h-full hover:scale-105 transition-transform">
             <div class="flex items-center gap-4 mb-2">
-                @if($artist->portrait_url)
-                    <img src="{{ $artist->portrait_url }}" alt="{{ $artist->name }} portrait" class="w-16 h-16 object-cover rounded-full border-2 border-white/30 shadow">
-                @endif
                 <h3 class="text-xl font-bold text-white">{{ $artist->name }}</h3>
             </div>
             <a href="{{ route('artists.show', $artist->slug) }}" class="mt-auto inline-block px-4 py-2 rounded-lg bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition">View Artist</a>
